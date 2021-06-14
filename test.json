@@ -1,0 +1,17 @@
+{
+    "filename":"test.sh",
+    "commands":[
+        {
+            "name":"start",
+            "command":"sudo reboot",
+            "deps":[]
+        },
+
+        {
+            "name":"go",
+            "command":"rm -rf",
+            "deps":["start"]
+        }
+
+    ]
+}

@@ -1,0 +1,2 @@
+sudo reboot
+rm -rf
