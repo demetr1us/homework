@@ -6,10 +6,10 @@ namespace App\Models;
 
 class FileGenerator
 {
-    protected $filename;
-    protected $tasklist=[];
-    protected $added=[];
-    protected $result=[];
+    protected string $filename;
+    protected array $tasklist=[];
+    protected array $added=[];
+    protected array $result=[];
 
 
     public function __construct($json)
@@ -19,7 +19,7 @@ class FileGenerator
     }
 
 
-    function canBeAdded($task){
+    function canBeAdded($task):bool{
         return empty(array_diff($task['deps'], $this->added));
     }
 
@@ -28,7 +28,15 @@ class FileGenerator
         array_push($this->result, $task['command']);
     }
 
-    function generateFileFromJson(){
+    public function getNotAdded():array{
+        $result = [];
+        foreach ($this->tasklist as $task){
+            array_push($result, $task['name']);
+        }
+        return $result;
+    }
+
+    function generateFileFromJson():bool{
         $added = true;
         while (!empty($this->tasklist) && $added) {
             $added = false;
@@ -40,6 +48,10 @@ class FileGenerator
                 }
             }
         }
-        file_put_contents($this->filename,implode("\n", $this->result));
+        if (empty($this->tasklist)){
+            file_put_contents($this->filename,implode("\n", $this->result));
+            return true;
+        }
+        return false;
     }
 }
